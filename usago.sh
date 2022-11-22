@@ -4,6 +4,7 @@
 
 <<'###'
 ./usago.sh $GOP "fs"
+
 fs.File 205
 fs.FileInfo 133
 fs.PathError 100
