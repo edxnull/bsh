@@ -10,5 +10,9 @@ for dir in *; do
             echo $dir 
             echo -e "${Red}$stat${End}"
         fi
+        ncommits=$(git -C $dir status | grep "by")
+        if [[ $ncommits == *"by"* ]]; then
+            echo -e "$dir: ${Red}$ncommits${End}"
+        fi
     fi
 done
