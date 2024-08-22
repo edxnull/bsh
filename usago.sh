@@ -3,6 +3,7 @@
 # A hacky way to get pkg.func usage stats within golang source.
 
 <<'###'
+./usago.sh will grep all imports and sort | uniq them before printing out
 ./usago.sh $GOP "fs"
 
 fs.File 205
@@ -29,14 +30,17 @@ or alternatively you can use ./usago.sh $GOP "filepath.Join" and get filepath.Jo
 ###
 
 if [ $# -ne 2 ]; then
+    grep -h -r -A 100 'import (' . | sed -n '/^import/,/^)/p' | grep '"' | sed 's/^[[:space:]]*//; s/"//g' | sort -u
     exit 0
 fi
 
 GOP=$1
 PKG=$2 
 
+CMD=`go doc -short regexp | sed 's/^[[:space:]]*//' | cut -d ' ' -f 2 | cut -d '(' -f 1`
+
 echo -n "" > out.txt
-for x in `go doc -short $PKG | cut -d "(" -f 1 | cut -d " " -f 2`; do 
+for x in $CMD; do
     if [[ $PKG == *"."* ]]; then
         echo $PKG $(grep -RhnIo "$PKG" $GOP | wc -l) > out.txt ; break
     else
