@@ -11,7 +11,7 @@ files=""
 
 for file in $(git diff-tree --no-commit-id --name-only $commit_hash -r); do
   extension="${file##*.}"
-  temp_file=$(mktemp ./$(uuidgen).$extension)
+  temp_file=$(mktemp ./$(uuidgen | cut -c1-8).$file.$extension)
   git show "$commit_hash:$file" > "$temp_file"
   files="$files $temp_file"
 done
