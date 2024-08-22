@@ -1,1 +1,1 @@
-Just a collection of bash scripts ¯\_(ツ)_/¯
+Just a collection of bash scripts 🤷‍♂️
