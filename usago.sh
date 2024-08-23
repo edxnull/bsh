@@ -40,7 +40,7 @@ PKG=$2
 CMD=`go doc -short $PKG | sed 's/^[[:space:]]*//' | cut -d ' ' -f 2 | cut -d '(' -f 1`
 
 max_length=$(printf '%s\n' "$CMD" | awk '{ print length }' | sort -rn | head -n1)
-max_length=$((max_length + 5))
+max_length=$((max_length + $(printf '%s\n' "$PKG" | awk '{ print length }') + 1))
 
 format="%-${max_length}s %d"
 
