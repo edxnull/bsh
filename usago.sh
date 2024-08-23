@@ -39,14 +39,26 @@ PKG=$2
 
 CMD=`go doc -short $PKG | sed 's/^[[:space:]]*//' | cut -d ' ' -f 2 | cut -d '(' -f 1`
 
-echo -n "" > out.txt
+max_length=$(printf '%s\n' "$CMD" |
+             awk '{ print length }' |  # Get the length of each
+             sort -rn |  # Sort numerically in descending order
+             head -n1)  # Get the maximum length
+
+max_length=$((max_length + 5))
+format="%-${max_length}s %d"
+
+declare -a results
+
 for x in $CMD; do
     if [[ $PKG == *"."* ]]; then
-        echo $PKG $(grep -RhnIo "$PKG" $GOP | wc -l) > out.txt ; break
+        count=$(grep -RhnIo "$PKG" $GOP | wc -l)
+        results+=("$(printf "$format" "$PKG" "$count")")
+        break
     else
-        echo $PKG.$x `grep -RhnIo "$PKG.$x" $GOP | wc -l` >> out.txt; 
+        count=$(grep -RhnIo "$PKG.$x" $GOP | wc -l)
+        results+=("$(printf "$format" "$PKG.$x" "$count")")
     fi
 done
 
-cat out.txt | sort -k2 -n -r
-rm out.txt
+IFS=$'\n' sorted=($(sort -k2 -n -r <<< "${results[*]}"))
+printf '%s\n' "${sorted[@]}"
