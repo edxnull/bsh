@@ -37,7 +37,7 @@ fi
 GOP=$1
 PKG=$2 
 
-CMD=`go doc -short regexp | sed 's/^[[:space:]]*//' | cut -d ' ' -f 2 | cut -d '(' -f 1`
+CMD=`go doc -short $PKG | sed 's/^[[:space:]]*//' | cut -d ' ' -f 2 | cut -d '(' -f 1`
 
 echo -n "" > out.txt
 for x in $CMD; do
