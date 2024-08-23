@@ -39,12 +39,9 @@ PKG=$2
 
 CMD=`go doc -short $PKG | sed 's/^[[:space:]]*//' | cut -d ' ' -f 2 | cut -d '(' -f 1`
 
-max_length=$(printf '%s\n' "$CMD" |
-             awk '{ print length }' |  # Get the length of each
-             sort -rn |  # Sort numerically in descending order
-             head -n1)  # Get the maximum length
-
+max_length=$(printf '%s\n' "$CMD" | awk '{ print length }' | sort -rn | head -n1)
 max_length=$((max_length + 5))
+
 format="%-${max_length}s %d"
 
 declare -a results
