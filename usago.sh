@@ -29,8 +29,10 @@ fs.SubFS 1
 or alternatively you can use ./usago.sh $GOP "filepath.Join" and get filepath.Join 1125
 ###
 
+
 if [ $# -ne 2 ]; then
-    grep -h -r -A 100 'import (' . | sed -n '/^import/,/^)/p' | grep '"' | sed 's/^[[:space:]]*//; s/"//g' | sort -u
+    #grep -h -r -A 100 'import (' . | sed -n '/^import/,/^)/p' | grep '"' | sed 's/^[[:space:]]*//; s/"//g' | sort -u
+    git grep -l "import (" -- "*.go" | xargs sed -n '/import (/,/)/{ /import (/d; /)/d; s/^[[:space:]]*"//; s/"$//; /./p; }' | sort | uniq -c | sort -rn
     exit 0
 fi
 
