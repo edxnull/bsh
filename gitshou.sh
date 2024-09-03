@@ -9,7 +9,7 @@ fi
 commit_hash=$1
 files=""
 
-for file in $(git diff-tree --no-commit-id --name-only $commit_hash -r); do
+for file in $(git ls-tree -r --name-only $commit_hash); do
   extension="${file##*.}"
   temp_file=$(mktemp ./$(uuidgen | cut -c1-8).$file.$extension)
   git show "$commit_hash:$file" > "$temp_file"
